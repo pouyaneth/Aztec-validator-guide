@@ -1,0 +1,31 @@
+[Unit]
+Description=Aztec Node Service
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+RestartSec=30
+ExecStartPre=-/usr/bin/docker stop aztec-node
+ExecStartPre=-/usr/bin/docker rm aztec-node
+ExecStart=/usr/bin/docker run --name aztec-node \
+  --network host \
+  -e ETHEREUM_HOSTS="https://your-quicknode-endpoint-1,https://your-quicknode-endpoint-2,https://your-alchemy-endpoint-1,https://your-alchemy-endpoint-2" \
+  -e L1_CONSENSUS_HOST_URLS="https://your-beacon-endpoint-1,https://your-beacon-endpoint-2" \
+  -e VALIDATOR_PRIVATE_KEY="0xYourPrivateKey" \
+  -e COINBASE="0xYourValidatorAddress" \
+  -e P2P_IP="YourPublicIPAddress" \
+  -e P2P_MAX_TX_POOL_SIZE="1000000000" \
+  -e LOG_LEVEL="debug" \
+  -e NODE_OPTIONS="--dns-result-order=ipv4first --no-warnings --max-http-header-size=16384" \
+  -e NODE_FETCH_TIMEOUT="120000" \
+  -e DNS_SERVERS="1.1.1.1,8.8.8.8" \
+  -v /root/.aztec:/root/.aztec \
+  --dns 1.1.1.1 \
+  --dns 8.8.8.8 \
+  aztecprotocol/aztec:alpha-testnet \
+  node --no-warnings --dns-result-order=ipv4first /usr/src/yarn-project/aztec/dest/bin/index.js start --network alpha-testnet --node --archiver --sequencer
+
+[Install]
+WantedBy=multi-user.target

@@ -1,2 +1,5 @@
-# Aztec-validator-guide
-Comprehensive guide for setting up and operating an Aztec validator node
+# Aztec Validator Node Setup Guide
+
+A comprehensive guide for setting up, configuring, and maintaining an Aztec validator node on the Sepolia testnet.
+
+[PASTE THE ENTIRE CONTENT HERE]
